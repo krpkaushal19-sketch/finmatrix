@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY backend/requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+
+WORKDIR /app/backend
+
+EXPOSE 10000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
