@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinMatrix | Smart Financial Decisions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #F0F4F8;
+            color: #1A2C3E;
+            line-height: 1.5;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
+
+        /* Giant Hero Section - First Page */
+        .hero-section {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #FFFFFF, #F8FAFF);
+            border-radius: 48px;
+            margin-bottom: 30px;
+            padding: 60px 40px;
+            border: 1px solid #E2E8F0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1A5F7A, #2D8BB5, #1A5F7A);
+        }
+        .giant-heading {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1A5F7A, #0F2B3D, #1A5F7A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+        .giant-subheading {
+            font-size: 1.5rem;
+            color: #6B85A0;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.4;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1A5F7A;
+        }
+        .hero-stat-label {
+            font-size: 0.8rem;
+            color: #6B85A0;
+        }
+        .scroll-hint {
+            margin-top: 50px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Header for other pages */
+        .header {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 28px;
+            margin-bottom: 24px;
+            border: 1px solid #E2E8F0;
+            display: none;
+        }
+        .header.visible {
+            display: block;
+        }
+        .logo-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1A5F7A, #0F2B3D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .trust-badge {
+            background: #F0F4FA;
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+        .trust-badge .label {
+            font-size: 0.6rem;
+            color: #6B85A0;
+        }
+        .trust-badge .value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1A5F7A;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1A2C3E;
+        }
+        .stat-label {
+            font-size: 0.6rem;
+            color: #6B85A0;
+        }
+
+        /* Tabs - Reordered */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: white;
+            padding: 6px;
+            border-radius: 60px;
+            width: fit-content;
+            border: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 24px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6B85A0;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #1A5F7A, #0F2B3D);
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #E2E8F0;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h2 i { color: #1A5F7A; }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+        .input-group { margin-bottom: 18px; }
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6B85A0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #F8FAFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        input:focus, select:focus { outline: none; border-color: #1A5F7A; }
+
+        input[type="range"] {
+            padding: 0;
+            height: 5px;
+            -webkit-appearance: none;
+            background: #E2E8F0;
+            border-radius: 3px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #1A5F7A;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        button {
+            background: linear-gradient(135deg, #1A5F7A, #0F2B3D);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,95,122,0.2); }
+
+        .bank-table { width: 100%; border-collapse: collapse; }
+        .bank-table th, .bank-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #E2E8F0; font-size: 0.75rem; }
+        .bank-table th { color: #6B85A0; font-weight: 600; }
+        .risk-high { color: #DC2626; font-weight: 600; }
+        .risk-medium { color: #F59E0B; font-weight: 600; }
+        .risk-low { color: #10B981; font-weight: 600; }
+
+        .result-card {
+            background: #F8FAFF;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #1A5F7A;
+        }
+
+        .card-recommendation {
+            background: #F8FAFF;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid #E2E8F0;
+        }
+        .card-recommendation.eligible { border-left: 3px solid #10B981; background: #F0FDF4; }
+        .card-recommendation.ineligible { opacity: 0.5; }
+
+        canvas { max-height: 180px; width: 100%; }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #E2E8F0;
+            font-size: 0.65rem;
+            color: #94A3B8;
+        }
+
+        @media (max-width: 900px) {
+            .container { padding: 16px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .tabs { width: 100%; justify-content: center; }
+            .giant-heading { font-size: 2.5rem; }
+            .giant-subheading { font-size: 1rem; }
+            .hero-section { padding: 40px 20px; min-height: 70vh; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- GIANT FIRST PAGE - HERO SECTION -->
+    <div id="heroSection" class="hero-section">
+        <div class="giant-heading">FinMatrix</div>
+        <div class="giant-subheading">Smart Financial Decisions · Data-Driven Insights</div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-number">₹90,000 Cr</div>
+                <div class="hero-stat-label">Yes Bank Collapse</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">15+</div>
+                <div class="hero-stat-label">Banks Analyzed</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">7.5%</div>
+                <div class="hero-stat-label">Highest FD Rate</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">750+</div>
+                <div class="hero-stat-label">Good Credit Score</div>
+            </div>
+        </div>
+        <div class="scroll-hint" onclick="enterDashboard()">
+            <i class="fas fa-chevron-down" style="font-size: 2rem; color: #1A5F7A;"></i>
+            <p style="font-size: 0.7rem; margin-top: 8px;">Explore Dashboard</p>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD (Hidden initially) -->
+    <div id="mainDashboard" style="display: none;">
+        <!-- Header -->
+        <div class="header visible">
+            <div class="logo-area">
+                <div class="logo">
+                    <h2>FinMatrix</h2>
+                    <p style="font-size: 0.7rem; color: #6B85A0;">Smart Financial Decisions</p>
+                </div>
+                <div class="trust-badge">
+                    <div class="label">Data Sources</div>
+                    <div class="value">RBI · Fitch Ratings · Bank Websites</div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-number">₹90,000 Cr</div><div class="stat-label">Yes Bank Collapse</div></div>
+                <div class="stat-item"><div class="stat-number">15+</div><div class="stat-label">Banks Analyzed</div></div>
+                <div class="stat-item"><div class="stat-number">7.5%</div><div class="stat-label">Highest FD Rate</div></div>
+                <div class="stat-item"><div class="stat-number">750+</div><div class="stat-label">Good Credit Score</div></div>
+            </div>
+        </div>
+
+        <!-- TABS - Reordered: Bank Safety at LAST -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="investment"><i class="fas fa-chart-line"></i> Smart Investment</button>
+            <button class="tab-btn" data-tab="credit"><i class="fas fa-credit-card"></i> Credit Card Finder</button>
+            <button class="tab-btn" data-tab="expense"><i class="fas fa-wallet"></i> Expense Tracker</button>
+            <button class="tab-btn" data-tab="bank"><i class="fas fa-university"></i> Bank Safety</button>
+        </div>
+
+        <!-- TAB 1: INVESTMENT (Default first) -->
+        <div id="tab-investment" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-coins"></i> Your Investment Details</h2>
+                    </div>
+                    <div class="input-group"><label>💰 Lump Sum (₹) - Fixed Deposit</label><input type="number" id="lumpSum" value="50000"></div>
+                    <div class="input-group"><label>📅 Monthly SIP (₹) - Recurring Deposit</label><input type="number" id="monthlySip" value="5000"></div>
+                    <div class="input-group"><label>⏱️ Tenure</label><select id="tenureSelect"><option value="1">1 Year</option><option value="3">3 Years</option><option value="5" selected>5 Years</option></select></div>
+                    <button id="getInvestmentBtn"><i class="fas fa-calculator"></i> Get Best Options</button>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-chart-pie"></i> Investment Summary</h2></div>
+                    <div id="investmentSummary"></div>
+                    <canvas id="fdRdChart" height="150" style="margin-top:12px;"></canvas>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="card"><h2><i class="fas fa-building"></i> Top Fixed Deposit Picks</h2><div id="fdResults" style="max-height: 350px; overflow-y: auto;"></div></div>
+                <div class="card"><h2><i class="fas fa-chart-line"></i> Top Recurring Deposit Picks</h2><div id="rdResults" style="max-height: 350px; overflow-y: auto;"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CREDIT CARD -->
+        <div id="tab-credit" class="tab-content" style="display:none;">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-chart-line"></i> Your Credit Profile</h2></div>
+                    <div class="input-group"><label>Your CIBIL Score (300-900)</label><input type="range" id="cibilScore" min="300" max="900" step="5" value="720"><span id="cibilValue" style="display:block; margin-top:5px; font-weight:bold;">720</span>
+                    <div id="cibilStatus" style="margin-top:8px; padding:8px; border-radius:10px;"></div></div>
+                    <canvas id="cibilGauge" height="120"></canvas>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-chart-pie"></i> Monthly Spending (₹)</h2></div>
+                    <div class="input-group"><label>🍕 Food</label><input type="range" id="foodSpend" min="0" max="50000" step="500" value="8000"><span id="foodVal" style="display:block; text-align:right;">₹8,000</span></div>
+                    <div class="input-group"><label>🛒 Shopping</label><input type="range" id="shoppingSpend" min="0" max="50000" step="500" value="4000"><span id="shoppingVal" style="display:block; text-align:right;">₹4,000</span></div>
+                    <div class="input-group"><label>✈️ Travel</label><input type="range" id="travelSpend" min="0" max="50000" step="500" value="2000"><span id="travelVal" style="display:block; text-align:right;">₹2,000</span></div>
+                    <div class="input-group"><label>⛽ Fuel</label><input type="range" id="fuelSpend" min="0" max="20000" step="500" value="1000"><span id="fuelVal" style="display:block; text-align:right;">₹1,000</span></div>
+                    <div class="input-group"><label>🎬 Entertainment</label><input type="range" id="entertainmentSpend" min="0" max="20000" step="500" value="1000"><span id="entertainmentVal" style="display:block; text-align:right;">₹1,000</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h2><i class="fas fa-chart-pie"></i> Spending Breakdown</h2></div>
+                <canvas id="spendingDonut" height="160"></canvas>
+            </div>
+            <div class="card">
+                <div class="card-header"><h2><i class="fas fa-trophy"></i> Cards You Qualify For</h2>
+                <span style="background:#D1FAE5; padding:4px 10px; border-radius:20px; font-size:0.65rem;">Based on your CIBIL</span></div>
+                <div id="creditCardResults" style="max-height: 500px; overflow-y: auto;"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: EXPENSE TRACKER -->
+        <div id="tab-expense" class="tab-content" style="display:none;">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-wallet"></i> Monthly Expenses</h2></div>
+                    <div class="input-group"><label>🍕 Food (₹)</label><input type="number" id="expFood" value="8000"></div>
+                    <div class="input-group"><label>🏠 Rent (₹)</label><input type="number" id="expRent" value="15000"></div>
+                    <div class="input-group"><label>🚗 Transport (₹)</label><input type="number" id="expTransport" value="3000"></div>
+                    <div class="input-group"><label>🛒 Shopping (₹)</label><input type="number" id="expShopping" value="4000"></div>
+                    <div class="input-group"><label>🎬 Entertainment (₹)</label><input type="number" id="expEntertainment" value="2000"></div>
+                    <div class="input-group"><label>💊 Healthcare (₹)</label><input type="number" id="expHealthcare" value="1000"></div>
+                    <div class="input-group"><label>📱 Utilities (₹)</label><input type="number" id="expUtilities" value="2000"></div>
+                    <button id="analyzeExpenseBtn"><i class="fas fa-chart-pie"></i> Analyze Expenses</button>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-chart-pie"></i> Expense Distribution</h2></div>
+                    <canvas id="expenseDistChart" height="200"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h2><i class="fas fa-lightbulb"></i> Spending Insights</h2></div>
+                <div id="expenseInsights"></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: BANK SAFETY (LAST) -->
+        <div id="tab-bank" class="tab-content" style="display:none;">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-sliders-h"></i> Risk Sensitivity</h2>
+                    </div>
+                    <div class="input-group">
+                        <label>Market Trust Level</label>
+                        <input type="range" id="alphaSlider" min="0.5" max="0.99" step="0.01" value="0.85">
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                            <span style="font-size:0.7rem;">More Random</span>
+                            <span style="color:#1A5F7A; font-weight:600;"><span id="alphaValue">0.85</span></span>
+                            <span style="font-size:0.7rem;">More Trust</span>
+                        </div>
+                    </div>
+                    <button id="runPagerankBtn"><i class="fas fa-chart-line"></i> Analyze Bank Safety</button>
+                    <div style="margin-top: 14px; padding: 10px; background: #F0F4FA; border-radius: 12px; text-align: center; font-size: 0.7rem;">
+                        <i class="fas fa-info-circle"></i> Lower score = Safer bank for deposits
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Analysis Progress</h2>
+                    </div>
+                    <canvas id="convergenceChart"></canvas>
+                    <div id="convergenceInfo" style="text-align:center; margin-top: 10px; font-size:0.7rem;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-shield-alt"></i> Bank Risk Assessment</h2>
+                    <span style="background:#FEF3C7; padding:4px 12px; border-radius:20px; font-size:0.65rem;">Higher score = Higher risk</span>
+                </div>
+                <div id="bankRanking" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-chart-line"></i> FinMatrix — Data: RBI, Fitch Ratings, Bank Websites (April 2026)
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let convergenceChart = null, spendingDonut = null, expenseChart = null, fdRdChart = null, cibilGauge = null;
+
+    function enterDashboard() {
+        document.getElementById('heroSection').style.display = 'none';
+        document.getElementById('mainDashboard').style.display = 'block';
+    }
+
+    async function apiCall(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch(e) {
+            console.error("API Error:", e);
+            return { success: false, error: e.message };
+        }
+    }
+
+    // BANK SAFETY
+    async function runPagerank() {
+        const alpha = parseFloat(document.getElementById('alphaSlider').value);
+        document.getElementById('alphaValue').innerText = alpha;
+        const data = await apiCall(`/pagerank?alpha=${alpha}`);
+        if (data.success) {
+            displayBankRanking(data.result.ranking);
+            drawConvergence(data.result.convergence_history);
+        } else {
+            document.getElementById('bankRanking').innerHTML = `<div class="result-card">⚠️ Backend server not running. Please start the server first.</div>`;
+        }
+    }
+
+    function displayBankRanking(ranking) {
+        if (!ranking || ranking.length === 0) {
+            document.getElementById('bankRanking').innerHTML = `<div class="result-card">⚠️ No data available. Make sure backend is running.</div>`;
+            return;
+        }
+        let html = `<table class="bank-table"><thead><tr><th>Rank</th><th>Bank Name</th><th>Risk Score</th><th>Safety Level</th></tr></thead><tbody>`;
+        ranking.forEach(r => {
+            let riskClass = r.risk_level === 'HIGH' ? 'risk-high' : (r.risk_level === 'MEDIUM' ? 'risk-medium' : 'risk-low');
+            let riskText = r.risk_level === 'HIGH' ? '🔴 High Risk' : (r.risk_level === 'MEDIUM' ? '🟡 Medium' : '🟢 Low Risk');
+            html += `<tr><td>#${r.rank}</td><td><strong>${r.bank}</strong></td><td class="${riskClass}">${r.health_score}</td><td>${riskText}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+        document.getElementById('bankRanking').innerHTML = html;
+    }
+
+    function drawConvergence(history) {
+        const ctx = document.getElementById('convergenceChart').getContext('2d');
+        if (convergenceChart) convergenceChart.destroy();
+        convergenceChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: history.map((_,i)=>i+1), datasets: [{ label: 'Error', data: history, borderColor: '#1A5F7A', backgroundColor: 'rgba(26,95,122,0.05)', borderWidth: 2, fill: true, tension: 0.3 }] },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { font: { size: 9 } } } } }
+        });
+        document.getElementById('convergenceInfo').innerHTML = `✅ Completed in ${history.length} iterations`;
+    }
+
+    // INVESTMENT
+    async function getInvestments() {
+        const principal = parseFloat(document.getElementById('lumpSum').value);
+        const monthly = parseFloat(document.getElementById('monthlySip').value);
+        const years = parseInt(document.getElementById('tenureSelect').value);
+        const data = await apiCall('/investment', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ principal, monthly_sip: monthly, tenure_years: years })
+        });
+        if (data.success) {
+            document.getElementById('fdResults').innerHTML = data.fd_recommendations.map(fd => `<div class="result-card"><strong>${fd.bank}</strong><br>Rate: ${fd.rate}% | Maturity: ₹${fd.maturity_amount.toLocaleString()} | Interest: ₹${fd.interest_earned.toLocaleString()}</div>`).join('');
+            document.getElementById('rdResults').innerHTML = data.rd_recommendations.map(rd => `<div class="result-card"><strong>${rd.bank}</strong><br>Rate: ${rd.rate}% | Maturity: ₹${rd.maturity_amount.toLocaleString()} | Interest: ₹${rd.interest_earned.toLocaleString()}</div>`).join('');
+            document.getElementById('investmentSummary').innerHTML = `<div class="result-card"><strong>Investment Summary</strong><br>FD: ₹${principal.toLocaleString()} | Monthly SIP: ₹${monthly.toLocaleString()}<br>Tenure: ${years} years</div>`;
+            if (fdRdChart) fdRdChart.destroy();
+            const ctx = document.getElementById('fdRdChart').getContext('2d');
+            fdRdChart = new Chart(ctx, { type: 'bar', data: { labels: data.fd_recommendations.slice(0,5).map(f => f.bank.split(' ')[0]), datasets: [{ label: 'FD Rate %', data: data.fd_recommendations.slice(0,5).map(f => f.rate), backgroundColor: '#1A5F7A', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { font: { size: 9 } } } } } });
+        }
+    }
+
+    // CREDIT CARD
+    async function updateCreditCards() {
+        const cibil = parseInt(document.getElementById('cibilScore').value);
+        document.getElementById('cibilValue').innerText = cibil;
+        let status = cibil >= 750 ? '✅ Excellent - You qualify for premium cards' : (cibil >= 700 ? '🟡 Good - Keep improving' : '🔴 Needs improvement');
+        document.getElementById('cibilStatus').innerHTML = status;
+        
+        if (cibilGauge) cibilGauge.destroy();
+        const ctx = document.getElementById('cibilGauge').getContext('2d');
+        cibilGauge = new Chart(ctx, { type: 'doughnut', data: { labels: ['Your Score', 'Remaining'], datasets: [{ data: [cibil-300, 900-cibil], backgroundColor: ['#1A5F7A', '#E2E8F0'], borderWidth: 0 }] }, options: { cutout: '70%', responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 8 } } } } } });
+        
+        const spending = {
+            Food: parseFloat(document.getElementById('foodSpend').value),
+            Shopping: parseFloat(document.getElementById('shoppingSpend').value),
+            Travel: parseFloat(document.getElementById('travelSpend').value),
+            Fuel: parseFloat(document.getElementById('fuelSpend').value),
+            Entertainment: parseFloat(document.getElementById('entertainmentSpend').value)
+        };
+        ['food', 'shopping', 'travel', 'fuel', 'entertainment'].forEach(c => { document.getElementById(`${c}Val`).innerHTML = `₹${spending[c.charAt(0).toUpperCase()+c.slice(1)].toLocaleString()}`; });
+        
+        if (spendingDonut) spendingDonut.destroy();
+        const ctx2 = document.getElementById('spendingDonut').getContext('2d');
+        spendingDonut = new Chart(ctx2, { type: 'doughnut', data: { labels: ['Food', 'Shopping', 'Travel', 'Fuel', 'Entertainment'], datasets: [{ data: Object.values(spending), backgroundColor: ['#1A5F7A', '#2D8BB5', '#3DA0C8', '#5FB4D8', '#8ECEE8'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 8 } } } } } });
+        
+        const data = await apiCall('/credit-cards', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cibil_score: cibil, spending })
+        });
+        if (data.success) {
+            document.getElementById('creditCardResults').innerHTML = `<div class="grid-2">` + data.recommendations.map(card => `<div class="card-recommendation ${card.eligible ? 'eligible' : 'ineligible'}"><strong>${card.icon} ${card.card_name}</strong> <span style="float:right;">${card.eligible ? '✅ Eligible' : `❌ Needs ${card.min_cibil}+`}</span><div style="margin-top:6px;">Monthly: ₹${card.monthly_benefit.toFixed(2)} | Yearly: ₹${card.yearly_benefit.toFixed(2)}</div><div>Fee: ₹${card.annual_fee.toLocaleString()}</div><div style="font-size:0.7rem;">${card.benefits}</div></div>`).join('') + `</div>`;
+        }
+    }
+
+    // EXPENSE ANALYZER
+    async function analyzeExpenses() {
+        const expenses = {
+            Food: parseFloat(document.getElementById('expFood').value),
+            Rent: parseFloat(document.getElementById('expRent').value),
+            Transport: parseFloat(document.getElementById('expTransport').value),
+            Shopping: parseFloat(document.getElementById('expShopping').value),
+            Entertainment: parseFloat(document.getElementById('expEntertainment').value),
+            Healthcare: parseFloat(document.getElementById('expHealthcare').value),
+            Utilities: parseFloat(document.getElementById('expUtilities').value)
+        };
+        const data = await apiCall('/expense-analyzer', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ expenses })
+        });
+        if (data.success) {
+            if (expenseChart) expenseChart.destroy();
+            const ctx = document.getElementById('expenseDistChart').getContext('2d');
+            expenseChart = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(expenses), datasets: [{ data: Object.values(expenses), backgroundColor: ['#1A5F7A', '#2D8BB5', '#3DA0C8', '#5FB4D8', '#8ECEE8', '#A8D8EA', '#C2E4F2'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 7 } } } } } });
+            document.getElementById('expenseInsights').innerHTML = data.insights.map(i => `<div class="result-card">${i}</div>`).join('');
+        }
+    }
+
+    // Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(`tab-${tab}`).style.display = 'block';
+            if (tab === 'investment') getInvestments();
+            if (tab === 'credit') updateCreditCards();
+            if (tab === 'expense') analyzeExpenses();
+            if (tab === 'bank') runPagerank();
+        });
+    });
+
+    // Event Listeners
+    document.getElementById('runPagerankBtn')?.addEventListener('click', runPagerank);
+    document.getElementById('alphaSlider')?.addEventListener('input', (e) => document.getElementById('alphaValue').innerText = e.target.value);
+    document.getElementById('getInvestmentBtn')?.addEventListener('click', getInvestments);
+    document.getElementById('analyzeExpenseBtn')?.addEventListener('click', analyzeExpenses);
+    document.getElementById('cibilScore')?.addEventListener('input', (e) => { document.getElementById('cibilValue').innerText = e.target.value; updateCreditCards(); });
+    ['foodSpend', 'shoppingSpend', 'travelSpend', 'fuelSpend', 'entertainmentSpend'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', () => updateCreditCards());
+    });
+
+    // Auto-run on page load for first tab
+    setTimeout(() => {
+        if (document.getElementById('mainDashboard').style.display === 'block') {
+            getInvestments();
+            updateCreditCards();
+            analyzeExpenses();
+        }
+    }, 100);
+</script>
+</body>
+</html>
